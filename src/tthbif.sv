@@ -1,4 +1,4 @@
-module ttbhif (
+module tthbif (
   input        clk_i,
   input        rst_ni,
 
