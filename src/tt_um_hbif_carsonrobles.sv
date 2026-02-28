@@ -29,7 +29,7 @@ module tt_um_hbif_carsonrobles (
   assign uio_out[0] = 1'b0;
   assign uio_out[1] = 1'b0;
   assign uio_out[2] = 1'b0;
-  assign uio_out[4] = 1'b0;
+  assign uio_out[3] = 1'b0;
   assign uio_out[5] = 1'b0;
   assign uio_out[6] = 1'b0;
   assign uio_out[7] = 1'b0;
