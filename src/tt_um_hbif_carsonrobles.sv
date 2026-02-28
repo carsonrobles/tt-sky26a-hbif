@@ -29,7 +29,6 @@ module tt_um_hbif_carsonrobles (
   assign uio_out[0] = 1'b0;
   assign uio_out[1] = 1'b0;
   assign uio_out[2] = 1'b0;
-  //assign uio_out[3] = 1'b0;
   assign uio_out[4] = 1'b0;
   assign uio_out[5] = 1'b0;
   assign uio_out[6] = 1'b0;
@@ -53,5 +52,16 @@ module tt_um_hbif_carsonrobles (
     .uart_rx_i ( uio_in[3]  ),
     .uart_tx_o ( uio_out[4] )
   );
+
+  wire _unused = ^{
+    uio_in[0],
+    uio_in[1],
+    uio_in[2],
+    uio_in[4],
+    uio_in[5],
+    uio_in[6],
+    uio_in[7],
+    ui_in
+  };
 
 endmodule
