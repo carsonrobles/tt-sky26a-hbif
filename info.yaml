@@ -21,6 +21,8 @@ project:
     - "rip/src/uart/rtl/uart_rx.sv"
     - "rip/src/uart/rtl/uart_tx.sv"
     - "rip/src/uart/rtl/uart.sv"
+    - "uart2rf.sv"
+    - "rf.sv"
     - "tthbif/src/tthbif_comb_path.sv"
     - "tthbif/src/tthbif_flop_path.sv"
     - "tthbif/src/tthbif_rx_lane.sv"

@@ -20,9 +20,6 @@ module tthbif_top #(
   logic       uart_tx_data_valid;
   logic [7:0] uart_tx_data;
 
-  assign uart_tx_data_valid = uart_rx_data_valid;
-  assign uart_tx_data       = uart_rx_data;
-
   // TODO:
   // sync reset
   // sync uart rx
@@ -55,6 +52,63 @@ module tthbif_top #(
   );
 `endif
 
+  // loop back:
+  //assign uart_tx_data_valid = uart_rx_data_valid;
+  //assign uart_tx_data       = uart_rx_data;
+
+  localparam int RF_DEPTH      = 16;
+  localparam int RF_ADDR_WIDTH = $clog2(RF_DEPTH);
+  localparam int RF_DATA_WIDTH = 4;
+
+  wire                     rf_en;
+  wire                     rf_we;
+  wire [RF_ADDR_WIDTH-1:0] rf_addr;
+  wire [RF_DATA_WIDTH-1:0] rf_wdata;
+  wire [RF_DATA_WIDTH-1:0] rf_rdata;
+
+  uart2rf #(
+    .RF_ADDR_WIDTH ( RF_ADDR_WIDTH ),
+    .RF_DATA_WIDTH ( RF_DATA_WIDTH )
+  ) u_uart2rf (
+    .clk_i             ( clk_i              ),
+    .rst_ni            ( rst_ni             ),
+
+    .uart_data_valid_i ( uart_rx_data_valid ),
+    .uart_data_i       ( uart_rx_data       ),
+    .uart_data_valid_o ( uart_tx_data_valid ),
+    .uart_data_o       ( uart_tx_data       ),
+
+    .rf_en_o           ( rf_en              ),
+    .rf_we_o           ( rf_we              ),
+    .rf_addr_o         ( rf_addr            ),
+    .rf_data_o         ( rf_wdata           ),
+    .rf_data_i         ( rf_rdata           )
+  );
+
+  wire [1:0] rx_comb_tap_sel;
+  wire [1:0] rx_flop_tap_sel;
+  wire [1:0] tx_comb_tap_sel;
+  wire [1:0] tx_flop_tap_sel;
+
+  rf #(
+    .DEPTH      ( RF_DEPTH      ),
+    .DATA_WIDTH ( RF_DATA_WIDTH )
+  ) u_rf (
+    .clk_i                ( clk_i           ),
+    .rst_ni               ( rst_ni          ),
+
+    .en_i                 ( rf_en           ),
+    .we_i                 ( rf_we           ),
+    .addr_i               ( rf_addr         ),
+    .data_i               ( rf_wdata        ),
+    .data_o               ( rf_rdata        ),
+
+    .rx_comb_tap_sel_o    ( rx_comb_tap_sel ),
+    .rx_flop_tap_sel_o    ( rx_flop_tap_sel ),
+    .tx_comb_tap_sel_o    ( tx_comb_tap_sel ),
+    .tx_flop_tap_sel_o    ( tx_flop_tap_sel )
+  );
+
   tthbif #(
     .NUM_LANES            ( NUM_LANES ),
   
@@ -62,18 +116,18 @@ module tthbif_top #(
     .NUM_COMB_TAP         ( 4         ),
     .NUM_BUF_PER_COMB_TAP ( 4         )
   ) u_tthbif (
-    .clk_i             ( clk_i       ),
-    .rst_ni            ( rst_ni      ),
+    .clk_i             ( clk_i           ),
+    .rst_ni            ( rst_ni          ),
   
-    .en_i              ( en_i        ),
+    .en_i              ( en_i            ),
   
-    .rx_flop_tap_sel_i ( 2'b11       ), // TODO: RF
-    .rx_comb_tap_sel_i ( 2'b11       ), // TODO: RF
-    .tx_flop_tap_sel_i ( 2'b11       ), // TODO: RF
-    .tx_comb_tap_sel_i ( 2'b11       ), // TODO: RF
+    .rx_comb_tap_sel_i ( rx_comb_tap_sel ),
+    .rx_flop_tap_sel_i ( rx_flop_tap_sel ),
+    .tx_comb_tap_sel_i ( tx_comb_tap_sel ),
+    .tx_flop_tap_sel_i ( tx_flop_tap_sel ),
   
-    .rx_i              ( tthbif_rx_i ),
-    .tx_o              ( tthbif_tx_o )
+    .rx_i              ( tthbif_rx_i     ),
+    .tx_o              ( tthbif_tx_o     )
   );
 
 endmodule

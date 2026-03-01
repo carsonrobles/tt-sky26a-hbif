@@ -6,7 +6,7 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = rip/src/uart/rtl/uart_pkg.sv rip/src/uart/rtl/uart_rx.sv rip/src/uart/rtl/uart_tx.sv rip/src/uart/rtl/uart.sv tthbif/src/tthbif_comb_path.sv tthbif/src/tthbif_flop_path.sv tthbif/src/tthbif_rx_lane.sv tthbif/src/tthbif_tx_lane.sv tthbif/src/tthbif.sv tthbif_top.sv tt_um_hbif_carsonrobles.sv
+PROJECT_SOURCES = rip/src/uart/rtl/uart_pkg.sv rip/src/uart/rtl/uart_rx.sv rip/src/uart/rtl/uart_tx.sv rip/src/uart/rtl/uart.sv tthbif/src/tthbif_comb_path.sv tthbif/src/tthbif_flop_path.sv tthbif/src/tthbif_rx_lane.sv tthbif/src/tthbif_tx_lane.sv tthbif/src/tthbif.sv uart2rf.sv rf.sv tthbif_top.sv tt_um_hbif_carsonrobles.sv
 
 ifneq ($(GATES),yes)
 
