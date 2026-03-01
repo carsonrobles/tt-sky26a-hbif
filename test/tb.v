@@ -14,14 +14,28 @@ module tb ();
   end
 
   // Wire up the inputs and outputs:
+  reg uart_rx;
+  wire uart_tx;
+
+  reg  [7:0] tthbif_rx;
+  wire [7:0] tthbif_tx;
+
   reg clk;
   reg rst_n;
   reg ena;
-  reg [7:0] ui_in;
-  reg [7:0] uio_in;
+
+  wire [7:0] ui_in;
   wire [7:0] uo_out;
+  wire [7:0] uio_in;
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
+
+  assign ui_in = tthbif_rx;
+  assign tthbif_tx = uo_out;
+
+  assign uio_in = {4'b0, uart_rx, 3'b0};
+  assign uart_tx = uio_out[4];
+
 `ifdef GL_TEST
   wire VPWR = 1'b1;
   wire VGND = 1'b0;

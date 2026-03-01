@@ -36,7 +36,7 @@ module tthbif_top #(
   assign uart_tx_o = 1'b0;
 `else
   uart #(
-    .CLKS_PER_BIT ( 6875 ) // CLK=66.667MHz BAUD=9600
+    .CLKS_PER_BIT ( 578 ) // CLK=66.667MHz BAUD=115200
   ) u_uart (
     .clk_i           ( clk_i              ),
     .rst_ni          ( rst_ni             ),
