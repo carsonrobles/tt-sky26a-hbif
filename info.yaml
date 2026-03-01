@@ -21,6 +21,7 @@ project:
     - "rip/src/uart/rtl/uart_rx.sv"
     - "rip/src/uart/rtl/uart_tx.sv"
     - "rip/src/uart/rtl/uart.sv"
+    - "tthbif_rx_lane.sv"
     - "tthbif.sv"
     - "tt_um_hbif_carsonrobles.sv"
 

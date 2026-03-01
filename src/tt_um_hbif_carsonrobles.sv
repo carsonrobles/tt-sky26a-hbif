@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Carson Robles
+ * Copyright (c) 2026 Carson Robles
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,6 +16,18 @@ module tt_um_hbif_carsonrobles (
     input  wire       rst_n     // reset_n - low to reset
 );
 
+  tthbif u_tthbif (
+    .clk_i       ( clk   ),
+    .rst_ni      ( rst_n ),
+
+    .en_i        ( ena   ),
+
+    .uart_rx_i   ( uio_in[3]  ),
+    .uart_tx_o   ( uio_out[4] ),
+
+    .tthbif_rx_i ( ui_in[0]   ),
+    .tthbif_tx_o ( uo_out[0]  )
+  );
 
   assign uio_oe[0] = 1'b1;
   assign uio_oe[1] = 1'b1;
@@ -34,7 +46,6 @@ module tt_um_hbif_carsonrobles (
   assign uio_out[6] = 1'b0;
   assign uio_out[7] = 1'b0;
 
-  assign uo_out[0] = 1'b0;
   assign uo_out[1] = 1'b0;
   assign uo_out[2] = 1'b0;
   assign uo_out[3] = 1'b0;
@@ -42,16 +53,6 @@ module tt_um_hbif_carsonrobles (
   assign uo_out[5] = 1'b0;
   assign uo_out[6] = 1'b0;
   assign uo_out[7] = 1'b0;
-
-  tthbif u_tthbif (
-    .clk_i     ( clk   ),
-    .rst_ni    ( rst_n ),
-
-    .en_i      ( ena   ),
-
-    .uart_rx_i ( uio_in[3]  ),
-    .uart_tx_o ( uio_out[4] )
-  );
 
   wire _unused = ^{
     uio_in[0],
@@ -61,7 +62,12 @@ module tt_um_hbif_carsonrobles (
     uio_in[5],
     uio_in[6],
     uio_in[7],
-    ui_in
+    ui_in[1],
+    ui_in[2],
+    ui_in[4],
+    ui_in[5],
+    ui_in[6],
+    ui_in[7]
   };
 
 endmodule
