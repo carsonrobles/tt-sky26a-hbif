@@ -23,8 +23,17 @@ module tthbif #(
   assign uart_tx_data_valid = uart_rx_data_valid;
   assign uart_tx_data       = uart_rx_data;
 
+  // TODO:
+  // sync reset
+  // sync uart rx
+
   // probably make this faster baud... less flops for counters
   // also, make the clks per bit configurable, in case the clock is run slower than 66MHz
+`define STUB_UART
+`ifdef STUB_UART
+  wire _uart_unused = uart_rx_i;
+  assign uart_tx_o = 1'b0;
+`else
   uart #(
     .CLKS_PER_BIT ( 6875 ) // CLK=66.667MHz BAUD=9600
   ) u_uart (
@@ -43,6 +52,7 @@ module tthbif #(
     .rx_i            ( uart_rx_i          ),
     .tx_o            ( uart_tx_o          )
   );
+`endif
 
   // TODO: hook up UART to small RF
 
