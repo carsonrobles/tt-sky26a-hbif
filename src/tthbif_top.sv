@@ -72,8 +72,8 @@ module tthbif_top #(
     .tx_flop_tap_sel_i ( 2'b11       ), // TODO: RF
     .tx_comb_tap_sel_i ( 2'b11       ), // TODO: RF
   
-    .tthbif_rx_i       ( tthbif_rx_i ),
-    .tthbif_tx_o       ( tthbif_tx_o )
+    .rx_i              ( tthbif_rx_i ),
+    .tx_o              ( tthbif_tx_o )
   );
 
 endmodule
