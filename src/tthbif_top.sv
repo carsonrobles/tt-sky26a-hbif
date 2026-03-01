@@ -56,7 +56,7 @@ module tthbif_top #(
   //assign uart_tx_data_valid = uart_rx_data_valid;
   //assign uart_tx_data       = uart_rx_data;
 
-  localparam int RF_DEPTH      = 16;
+  localparam int RF_DEPTH      = 8;
   localparam int RF_ADDR_WIDTH = $clog2(RF_DEPTH);
   localparam int RF_DATA_WIDTH = 4;
 
