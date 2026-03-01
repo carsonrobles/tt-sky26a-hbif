@@ -1,3 +1,6 @@
 [submodule "src/rip"]
 	path = src/rip
 	url = git@github.com:carsonrobles/rip.git
+[submodule "src/tthbif"]
+	path = src/tthbif
+	url = git@github.com:carsonrobles/tthbif.git

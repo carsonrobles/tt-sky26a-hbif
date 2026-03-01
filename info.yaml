@@ -21,11 +21,12 @@ project:
     - "rip/src/uart/rtl/uart_rx.sv"
     - "rip/src/uart/rtl/uart_tx.sv"
     - "rip/src/uart/rtl/uart.sv"
-    - "tthbif_comb_path.sv"
-    - "tthbif_flop_path.sv"
-    - "tthbif_rx_lane.sv"
-    - "tthbif_tx_lane.sv"
-    - "tthbif.sv"
+    - "tthbif/src/tthbif_comb_path.sv"
+    - "tthbif/src/tthbif_flop_path.sv"
+    - "tthbif/src/tthbif_rx_lane.sv"
+    - "tthbif/src/tthbif_tx_lane.sv"
+    - "tthbif/src/tthbif.sv"
+    - "tthbif_top.sv"
     - "tt_um_hbif_carsonrobles.sv"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.

@@ -1,4 +1,4 @@
-module tthbif #(
+module tthbif_top #(
   parameter int NUM_LANES = 1
 ) (
   input                  clk_i,
@@ -29,6 +29,7 @@ module tthbif #(
 
   // probably make this faster baud... less flops for counters
   // also, make the clks per bit configurable, in case the clock is run slower than 66MHz
+
 `define STUB_UART
 `ifdef STUB_UART
   wire _uart_unused = uart_rx_i;
@@ -54,40 +55,25 @@ module tthbif #(
   );
 `endif
 
-  // TODO: hook up UART to small RF
-
-  wire [NUM_LANES-1:0] tthbif_rx;
-  wire [NUM_LANES-1:0] tthbif_tx;
-
-  for (genvar gi=0; gi<NUM_LANES; gi++) begin: g_lanes
-
-    tthbif_rx_lane u_rx_lane (
-      .clk_i          ( clk_i           ),
-      .rst_ni         ( rst_ni          ),
-    
-      .comb_tap_sel_i ( 2'b11           ), // TODO: RF
-      .flop_tap_sel_i ( 2'b11           ), // TODO: RF
-    
-      .rx_i           ( tthbif_rx_i[gi] ),
-      .rx_o           ( tthbif_rx[gi]   )
-    );
-
-    tthbif_tx_lane u_tx_lane (
-      .clk_i          ( clk_i           ),
-      .rst_ni         ( rst_ni          ),
-    
-      .comb_tap_sel_i ( 2'b11           ), // TODO: RF
-      .flop_tap_sel_i ( 2'b11           ), // TODO: RF
-    
-      .tx_i           ( tthbif_tx[gi]   ),
-      .tx_o           ( tthbif_tx_o[gi] )
-    );
-
-    // loop back for now
-    assign tthbif_tx[gi] = tthbif_rx[gi];
-
-  end: g_lanes
-
-  wire _unused = uart_tx_data_ready;
+  tthbif #(
+    .NUM_LANES            ( 1 ),
+  
+    .NUM_FLOP_TAP         ( 4 ),
+    .NUM_COMB_TAP         ( 4 ),
+    .NUM_BUF_PER_COMB_TAP ( 4 )
+  ) u_tthbif (
+    .clk_i             ( clk_i       ),
+    .rst_ni            ( rst_ni      ),
+  
+    .en_i              ( en_i        ),
+  
+    .rx_flop_tap_sel_i ( 2'b11       ), // TODO: RF
+    .rx_comb_tap_sel_i ( 2'b11       ), // TODO: RF
+    .tx_flop_tap_sel_i ( 2'b11       ), // TODO: RF
+    .tx_comb_tap_sel_i ( 2'b11       ), // TODO: RF
+  
+    .tthbif_rx_i       ( tthbif_rx_i ),
+    .tthbif_tx_o       ( tthbif_tx_o )
+  );
 
 endmodule

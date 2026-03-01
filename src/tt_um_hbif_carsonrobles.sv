@@ -16,7 +16,7 @@ module tt_um_hbif_carsonrobles (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  tthbif u_tthbif (
+  tthbif_top u_tthbif_top (
     .clk_i       ( clk   ),
     .rst_ni      ( rst_n ),
 
