@@ -6,12 +6,13 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = rip/src/uart/rtl/uart_pkg.sv rip/src/uart/rtl/uart_rx.sv rip/src/uart/rtl/uart_tx.sv rip/src/uart/rtl/uart.sv tthbif_rx_lane.sv tthbif.sv tt_um_hbif_carsonrobles.sv
+PROJECT_SOURCES = rip/src/uart/rtl/uart_pkg.sv rip/src/uart/rtl/uart_rx.sv rip/src/uart/rtl/uart_tx.sv rip/src/uart/rtl/uart.sv tthbif_comb_path.sv tthbif_flop_path.sv tthbif_rx_lane.sv tthbif_tx_lane.sv tthbif.sv tt_um_hbif_carsonrobles.sv
 
 ifneq ($(GATES),yes)
 
 # RTL simulation:
 SIM_BUILD				= sim_build/rtl
+COMPILE_ARGS    += -DSIMULATION
 VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,$(PROJECT_SOURCES))
 
 else

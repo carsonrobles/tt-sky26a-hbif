@@ -47,6 +47,7 @@ module tthbif #(
   // TODO: hook up UART to small RF
 
   wire [NUM_LANES-1:0] tthbif_rx;
+  wire [NUM_LANES-1:0] tthbif_tx;
 
   for (genvar gi=0; gi<NUM_LANES; gi++) begin: g_lanes
 
@@ -61,7 +62,19 @@ module tthbif #(
       .rx_o           ( tthbif_rx[gi]   )
     );
 
-    assign tthbif_tx_o[gi] = tthbif_rx[gi];
+    tthbif_tx_lane u_tx_lane (
+      .clk_i          ( clk_i           ),
+      .rst_ni         ( rst_ni          ),
+    
+      .comb_tap_sel_i ( 2'b11           ), // TODO: RF
+      .flop_tap_sel_i ( 2'b11           ), // TODO: RF
+    
+      .tx_i           ( tthbif_tx[gi]   ),
+      .tx_o           ( tthbif_tx_o[gi] )
+    );
+
+    // loop back for now
+    assign tthbif_tx[gi] = tthbif_rx[gi];
 
   end: g_lanes
 
