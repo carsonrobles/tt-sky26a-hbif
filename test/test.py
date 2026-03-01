@@ -25,9 +25,9 @@ async def test_project(dut):
     dut._log.info("Test project behavior")
 
     for i in range(64):
-      dut.ui_in.value = i & 0x1
+      dut.ui_in.value = i
       await ClockCycles(dut.clk, 1)
-      #assert dut.uo_out.value == i & 0x1
+      #assert dut.uo_out.value == i
       print(f"tx={dut.uo_out.value}");
 
     # Keep testing the module by changing the input values, waiting for

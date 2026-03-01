@@ -16,17 +16,27 @@ module tt_um_hbif_carsonrobles (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  tthbif_top u_tthbif_top (
-    .clk_i       ( clk   ),
-    .rst_ni      ( rst_n ),
+  localparam int NUM_LANES = 8;
 
-    .en_i        ( ena   ),
+  wire [NUM_LANES-1:0] tthbif_rx;
+  wire [NUM_LANES-1:0] tthbif_tx;
+
+  assign tthbif_rx             = ui_in[NUM_LANES-1:0];
+  assign uo_out[NUM_LANES-1:0] = tthbif_tx;
+
+  tthbif_top #(
+    .NUM_LANES ( NUM_LANES )
+  ) u_tthbif_top (
+    .clk_i       ( clk        ),
+    .rst_ni      ( rst_n      ),
+
+    .en_i        ( ena        ),
 
     .uart_rx_i   ( uio_in[3]  ),
     .uart_tx_o   ( uio_out[4] ),
 
-    .tthbif_rx_i ( ui_in[0]   ),
-    .tthbif_tx_o ( uo_out[0]  )
+    .tthbif_rx_i ( tthbif_rx  ),
+    .tthbif_tx_o ( tthbif_tx  )
   );
 
   assign uio_oe[0] = 1'b1;
@@ -46,14 +56,6 @@ module tt_um_hbif_carsonrobles (
   assign uio_out[6] = 1'b0;
   assign uio_out[7] = 1'b0;
 
-  assign uo_out[1] = 1'b0;
-  assign uo_out[2] = 1'b0;
-  assign uo_out[3] = 1'b0;
-  assign uo_out[4] = 1'b0;
-  assign uo_out[5] = 1'b0;
-  assign uo_out[6] = 1'b0;
-  assign uo_out[7] = 1'b0;
-
   wire _unused = ^{
     uio_in[0],
     uio_in[1],
@@ -61,13 +63,7 @@ module tt_um_hbif_carsonrobles (
     uio_in[4],
     uio_in[5],
     uio_in[6],
-    uio_in[7],
-    ui_in[1],
-    ui_in[2],
-    ui_in[4],
-    ui_in[5],
-    ui_in[6],
-    ui_in[7]
+    uio_in[7]
   };
 
 endmodule
