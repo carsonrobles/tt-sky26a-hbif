@@ -30,7 +30,7 @@ module tthbif_top #(
   // probably make this faster baud... less flops for counters
   // also, make the clks per bit configurable, in case the clock is run slower than 66MHz
 
-`define STUB_UART
+//`define STUB_UART
 `ifdef STUB_UART
   wire _uart_unused = uart_rx_i;
   assign uart_tx_o = 1'b0;
