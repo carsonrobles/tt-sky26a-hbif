@@ -12,15 +12,15 @@ from cocotb_uart import uart
 
 
 def build_packet(wr: bool, addr: int, data: int):
-    p = bytearray(1)
+    p = bytearray(2)
 
     if wr:
         p[0] = 1 << 7
     else:
         p[0] = 0
 
-    p[0] |= (addr & 0x7) << 4
-    p[0] |= data & 0xF
+    p[0] |= addr & 0x3F
+    p[1] |= data & 0xF
 
     return bytes(p)
 
@@ -53,16 +53,7 @@ async def test_project(dut):
         await ClockCycles(dut.clk, 1)
         print(f"tx={dut.tthbif_tx.value}");
 
-    #NUM_BYTES = 32
-    #data = bytes(random.getrandbits(8) for _ in range(NUM_BYTES))
-
-    #print(f"sending bytes {data}")
-    #cocotb.start_soon(uart_tx.send_bytes(data))
-    #recv = await uart_rx.recv_bytes(len(data))
-    #print(f"received bytes {recv}")
-    #assert recv == data
-
-    NUM_ADDR = 8
+    NUM_ADDR = 32
     data = bytes(random.getrandbits(4) for _ in range(NUM_ADDR))
 
     # read every address out of reset and assert it to be 0
