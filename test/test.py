@@ -48,8 +48,16 @@ async def test_project(dut):
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
 
+    for i in range(8):
+        dut.tthbif_rx.value = 0
+        await ClockCycles(dut.clk, 1)
+        print(f"tx={dut.tthbif_tx.value}");
     for i in range(16):
         dut.tthbif_rx.value = i
+        await ClockCycles(dut.clk, 1)
+        print(f" tx={dut.tthbif_tx.value}");
+    for i in range(8):
+        dut.tthbif_rx.value = 0
         await ClockCycles(dut.clk, 1)
         print(f"tx={dut.tthbif_tx.value}");
 
@@ -82,3 +90,17 @@ async def test_project(dut):
         dut._log.info(f"recv rf[{i}]={hex(recv[0])}")
 
         assert recv == bytes([data[i] & 0xf])
+
+    for i in range(8):
+        dut.tthbif_rx.value = 0
+        await ClockCycles(dut.clk, 1)
+        print(f"tx={dut.tthbif_tx.value}");
+    for i in range(16):
+        dut.tthbif_rx.value = i
+        await ClockCycles(dut.clk, 1)
+        print(f" tx={dut.tthbif_tx.value}");
+    for i in range(8):
+        dut.tthbif_rx.value = 0
+        await ClockCycles(dut.clk, 1)
+        print(f"tx={dut.tthbif_tx.value}");
+
