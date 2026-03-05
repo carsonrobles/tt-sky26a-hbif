@@ -85,10 +85,10 @@ module tthbif_top #(
     .rf_data_i         ( rf_rdata           )
   );
 
-  wire [1:0] rx_comb_tap_sel;
-  wire [1:0] rx_flop_tap_sel;
-  wire [1:0] tx_comb_tap_sel;
-  wire [1:0] tx_flop_tap_sel;
+  wire [NUM_LANES-1:0][1:0] rx_comb_tap_sel;
+  wire [NUM_LANES-1:0][1:0] rx_flop_tap_sel;
+  wire [NUM_LANES-1:0][1:0] tx_comb_tap_sel;
+  wire [NUM_LANES-1:0][1:0] tx_flop_tap_sel;
 
   rf #(
     .DEPTH      ( RF_DEPTH      ),
@@ -109,6 +109,9 @@ module tthbif_top #(
     .tx_flop_tap_sel_o    ( tx_flop_tap_sel )
   );
 
+  wire [NUM_LANES-1:0] tthbif_rx;
+  wire [NUM_LANES-1:0] tthbif_tx;
+
   tthbif #(
     .NUM_LANES            ( NUM_LANES ),
   
@@ -116,18 +119,27 @@ module tthbif_top #(
     .NUM_COMB_TAP         ( 4         ),
     .NUM_BUF_PER_COMB_TAP ( 4         )
   ) u_tthbif (
-    .clk_i             ( clk_i           ),
-    .rst_ni            ( rst_ni          ),
+    .clk_i             ( clk_i             ),
+    .rst_ni            ( rst_ni            ),
   
-    .en_i              ( en_i            ),
+    .en_i              ( en_i              ),
+
+    .rx_lane_en_i      ( {NUM_LANES{en_i}} ),
+    .tx_lane_en_i      ( {NUM_LANES{en_i}} ),
   
-    .rx_comb_tap_sel_i ( rx_comb_tap_sel ),
-    .rx_flop_tap_sel_i ( rx_flop_tap_sel ),
-    .tx_comb_tap_sel_i ( tx_comb_tap_sel ),
-    .tx_flop_tap_sel_i ( tx_flop_tap_sel ),
+    .rx_comb_tap_sel_i ( rx_comb_tap_sel   ),
+    .rx_flop_tap_sel_i ( rx_flop_tap_sel   ),
+    .tx_comb_tap_sel_i ( tx_comb_tap_sel   ),
+    .tx_flop_tap_sel_i ( tx_flop_tap_sel   ),
   
-    .rx_i              ( tthbif_rx_i     ),
-    .tx_o              ( tthbif_tx_o     )
+    .rx_i              ( tthbif_rx_i       ),
+    .tx_o              ( tthbif_tx_o       ),
+
+    .rx_o              ( tthbif_rx         ),
+    .tx_i              ( tthbif_tx         )
   );
+
+  // loop back
+  assign tthbif_tx = tthbif_rx;
 
 endmodule

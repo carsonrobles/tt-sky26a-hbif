@@ -2,20 +2,20 @@ module rf #(
   parameter int DEPTH,
   parameter int DATA_WIDTH
 ) (
-  input                            clk_i,
-  input                            rst_ni,
+  input                                 clk_i,
+  input                                 rst_ni,
 
-  input                            en_i,
-  input                            we_i,
-  input        [$clog2(DEPTH)-1:0] addr_i,
-  input        [   DATA_WIDTH-1:0] data_i,
-  output logic [   DATA_WIDTH-1:0] data_o,
+  input                                 en_i,
+  input                                 we_i,
+  input             [$clog2(DEPTH)-1:0] addr_i,
+  input             [   DATA_WIDTH-1:0] data_i,
+  output logic      [   DATA_WIDTH-1:0] data_o,
 
   // TODO: config outputs
-  output       [              1:0] rx_comb_tap_sel_o,
-  output       [              1:0] rx_flop_tap_sel_o,
-  output       [              1:0] tx_comb_tap_sel_o,
-  output       [              1:0] tx_flop_tap_sel_o
+  output       [7:0][              1:0] rx_comb_tap_sel_o,
+  output       [7:0][              1:0] rx_flop_tap_sel_o,
+  output       [7:0][              1:0] tx_comb_tap_sel_o,
+  output       [7:0][              1:0] tx_flop_tap_sel_o
 );
 
   logic [DEPTH-1:0][DATA_WIDTH-1:0] mem;
@@ -34,9 +34,11 @@ module rf #(
     data_o <= mem[addr_i];
   end
 
-  assign rx_comb_tap_sel_o = mem[0][1:0];
-  assign rx_flop_tap_sel_o = mem[0][3:2];
-  assign tx_comb_tap_sel_o = mem[1][1:0];
-  assign tx_flop_tap_sel_o = mem[1][3:2];
+  for (genvar gi=0; gi<8; gi++) begin: g_lane_config
+    assign rx_comb_tap_sel_o[gi] = mem[2*gi+0][1:0];
+    assign rx_flop_tap_sel_o[gi] = mem[2*gi+0][3:2];
+    assign tx_comb_tap_sel_o[gi] = mem[2*gi+1][1:0];
+    assign tx_flop_tap_sel_o[gi] = mem[2*gi+1][3:2];
+  end: g_lane_config
 
 endmodule
