@@ -16,7 +16,7 @@ module tt_um_hbif_carsonrobles (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  localparam int NUM_LANES = 8;
+  localparam int NUM_LANES = 4;
 
   wire [NUM_LANES-1:0] tthbif_rx;
   wire [NUM_LANES-1:0] tthbif_tx;

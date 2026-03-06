@@ -1,0 +1,27 @@
+Address,Name,SW Access,HW Access,Reg[3],Reg[2],Reg[1],Reg[0]
+0,RX0 CFG0,RW,R,n comb tap sel,,p comb tap sel,
+1,RX0 CFG1,RW,R,output enable,enable/reset_n,n flop tap sel,p flop tap sel
+2,RX1 CFG0,RW,R,n comb tap sel,,p comb tap sel,
+3,RX1 CFG1,RW,R,output enable,enable/reset_n,n flop tap sel,p flop tap sel
+4,RX2 CFG0,RW,R,n comb tap sel,,p comb tap sel,
+5,RX2 CFG1,RW,R,output enable,enable/reset_n,n flop tap sel,p flop tap sel
+6,RX3 CFG0,RW,R,n comb tap sel,,p comb tap sel,
+7,RX3 CFG1,RW,R,output enable,enable/reset_n,n flop tap sel,p flop tap sel
+8,TX0 CFG0,RW,R,n comb tap sel,,p comb tap sel,
+9,TX0 CFG1,RW,R,output enable,enable/reset_n,n flop tap sel,p flop tap sel
+10,TX1 CFG0,RW,R,n comb tap sel,,p comb tap sel,
+11,TX1 CFG1,RW,R,output enable,enable/reset_n,n flop tap sel,p flop tap sel
+12,TX2 CFG0,RW,R,n comb tap sel,,p comb tap sel,
+13,TX2 CFG1,RW,R,output enable,enable/reset_n,n flop tap sel,p flop tap sel
+14,TX3 CFG0,RW,R,n comb tap sel,,p comb tap sel,
+15,TX3 CFG1,RW,R,output enable,enable/reset_n,n flop tap sel,p flop tap sel
+16,IF CFG0,RW,R,function select,,Tx SDR/DDR,Rx SDR/DDR
+17,TEST CFG0,RW,R,test select,,freeze result,enable/reset_n
+18,TEST CFG1,RW,R,reserved,Rx/Tx select,lane select,
+19,TEST CFG2,RW,R,sync length,,,
+20,TEST CFG3,RW,R,test length,,,
+21,TEST RES0,RW,RW,reserved,,test done,sync successful
+22,TEST RES1,RW,RW,error count_0,,,
+23,TEST RES2,RW,RW,error count_1,,,
+24,TEST RES3,RW,RW,error count_2,,,
+25,TEST RES4,RW,RW,error count_3,,,

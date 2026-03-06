@@ -89,7 +89,10 @@ async def test_project(dut):
         recv = await uart_rx.recv_bytes(1)
         dut._log.info(f"recv rf[{i}]={hex(recv[0])}")
 
-        assert recv == bytes([data[i] & 0xf])
+        if i > 25:
+            assert recv == bytes([0])
+        else:
+            assert recv == bytes([data[i] & 0xf])
 
     for i in range(8):
         dut.tthbif_rx.value = 0

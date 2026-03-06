@@ -17,8 +17,8 @@ module tb ();
   reg uart_rx;
   wire uart_tx;
 
-  reg  [7:0] tthbif_rx;
-  wire [7:0] tthbif_tx;
+  reg  [3:0] tthbif_rx;
+  wire [3:0] tthbif_tx;
 
   reg clk;
   reg rst_n;
@@ -30,8 +30,8 @@ module tb ();
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
 
-  assign ui_in = tthbif_rx;
-  assign tthbif_tx = uo_out;
+  assign ui_in = {4'b0, tthbif_rx};
+  assign tthbif_tx = uo_out[3:0];
 
   assign uio_in = {4'b0, uart_rx, 3'b0};
   assign uart_tx = uio_out[4];
