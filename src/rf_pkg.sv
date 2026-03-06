@@ -10,7 +10,7 @@ typedef struct packed {
 
 typedef struct packed {
   logic        output_enable;
-  logic        enable_reset_n;
+  logic        enable;
   logic        n_flop_tap_sel;
   logic        p_flop_tap_sel;
 } RX0_CFG1_t;
@@ -22,7 +22,7 @@ typedef struct packed {
 
 typedef struct packed {
   logic        output_enable;
-  logic        enable_reset_n;
+  logic        enable;
   logic        n_flop_tap_sel;
   logic        p_flop_tap_sel;
 } RX1_CFG1_t;
@@ -34,7 +34,7 @@ typedef struct packed {
 
 typedef struct packed {
   logic        output_enable;
-  logic        enable_reset_n;
+  logic        enable;
   logic        n_flop_tap_sel;
   logic        p_flop_tap_sel;
 } RX2_CFG1_t;
@@ -46,7 +46,7 @@ typedef struct packed {
 
 typedef struct packed {
   logic        output_enable;
-  logic        enable_reset_n;
+  logic        enable;
   logic        n_flop_tap_sel;
   logic        p_flop_tap_sel;
 } RX3_CFG1_t;
@@ -58,7 +58,7 @@ typedef struct packed {
 
 typedef struct packed {
   logic        output_enable;
-  logic        enable_reset_n;
+  logic        enable;
   logic        n_flop_tap_sel;
   logic        p_flop_tap_sel;
 } TX0_CFG1_t;
@@ -70,7 +70,7 @@ typedef struct packed {
 
 typedef struct packed {
   logic        output_enable;
-  logic        enable_reset_n;
+  logic        enable;
   logic        n_flop_tap_sel;
   logic        p_flop_tap_sel;
 } TX1_CFG1_t;
@@ -82,7 +82,7 @@ typedef struct packed {
 
 typedef struct packed {
   logic        output_enable;
-  logic        enable_reset_n;
+  logic        enable;
   logic        n_flop_tap_sel;
   logic        p_flop_tap_sel;
 } TX2_CFG1_t;
@@ -94,7 +94,7 @@ typedef struct packed {
 
 typedef struct packed {
   logic        output_enable;
-  logic        enable_reset_n;
+  logic        enable;
   logic        n_flop_tap_sel;
   logic        p_flop_tap_sel;
 } TX3_CFG1_t;

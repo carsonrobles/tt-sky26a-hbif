@@ -119,15 +119,15 @@ module tthbif_top #(
   wire [NUM_LANES-1:0][1:0] tx_comb_tap_sel;
   wire [NUM_LANES-1:0]      tx_flop_tap_sel;
 
-  assign rx_lane_en[0]      = rf_out.RX0_CFG1.enable_reset_n;
-  assign rx_lane_en[1]      = rf_out.RX1_CFG1.enable_reset_n;
-  assign rx_lane_en[2]      = rf_out.RX2_CFG1.enable_reset_n;
-  assign rx_lane_en[3]      = rf_out.RX3_CFG1.enable_reset_n;
+  assign rx_lane_en[0]      = rf_out.RX0_CFG1.enable;
+  assign rx_lane_en[1]      = rf_out.RX1_CFG1.enable;
+  assign rx_lane_en[2]      = rf_out.RX2_CFG1.enable;
+  assign rx_lane_en[3]      = rf_out.RX3_CFG1.enable;
 
-  assign tx_lane_en[0]      = rf_out.TX0_CFG1.enable_reset_n;
-  assign tx_lane_en[1]      = rf_out.TX1_CFG1.enable_reset_n;
-  assign tx_lane_en[2]      = rf_out.TX2_CFG1.enable_reset_n;
-  assign tx_lane_en[3]      = rf_out.TX3_CFG1.enable_reset_n;
+  assign tx_lane_en[0]      = rf_out.TX0_CFG1.enable;
+  assign tx_lane_en[1]      = rf_out.TX1_CFG1.enable;
+  assign tx_lane_en[2]      = rf_out.TX2_CFG1.enable;
+  assign tx_lane_en[3]      = rf_out.TX3_CFG1.enable;
 
   assign rx_comb_tap_sel[0] = rf_out.RX0_CFG0.p_comb_tap_sel;
   assign rx_flop_tap_sel[0] = rf_out.RX0_CFG1.p_flop_tap_sel;

@@ -6,7 +6,7 @@
 #   <module>.sv      : regfile module using explicit package references (<pkg>::type)
 #
 # CSV format:
-#   Address,Name,SW Access,HW Access,Reg[N],Reg[N-1],...,Reg[0]
+#   Address,Name,SW Access,HW Access,Reset Value,Reg[N],Reg[N-1],...,Reg[0]
 #
 # Rules:
 # - Register width is inferred from the Reg[x] columns (must be contiguous).
@@ -17,6 +17,7 @@
 #   Example (4b):
 #     Reg[3]=error_count, Reg[2]=, Reg[1]=, Reg[0]=  --> logic [3:0] error_count;
 #     Reg[1]=p_sel, Reg[0]=                           --> logic [1:0] p_sel;
+# - Reset Value is REQUIRED.
 # - Port naming:
 #     inputs end with _i, outputs end with _o
 #     clk_i, rst_ni
@@ -58,6 +59,7 @@ class Reg:
     # ordered MSB -> LSB, one entry per bit column
     bit_cells: List[str]
     width: int
+    reset: int
 
 
 # -----------------------------
@@ -67,6 +69,65 @@ class Reg:
 def parse_access(val: str) -> Access:
     v = (val or "").strip().upper()
     return Access(r=("R" in v), w=("W" in v))
+
+
+def parse_reset_value(val: str, width: int, reg_name: str) -> int:
+    v = (val or "").strip()
+    if not v:
+        raise RuntimeError(f"Register '{reg_name}': Reset Value cannot be empty")
+
+    # Support:
+    #   0
+    #   15
+    #   0xF
+    #   0b1010
+    #   4'hA
+    #   8'd3
+    #   4'b0011
+    sv_lit = re.fullmatch(r"(?i)(\d+)'([bdh])([0-9a-f_xz?]+)", v)
+    if sv_lit:
+        lit_width = int(sv_lit.group(1))
+        base_ch = sv_lit.group(2).lower()
+        digits = sv_lit.group(3).replace("_", "")
+        if any(ch in digits.lower() for ch in ("x", "z", "?")):
+            raise RuntimeError(
+                f"Register '{reg_name}': Reset Value '{v}' contains x/z/? which is not supported"
+            )
+        base = {"b": 2, "d": 10, "h": 16}[base_ch]
+        try:
+            parsed = int(digits, base)
+        except ValueError as e:
+            raise RuntimeError(
+                f"Register '{reg_name}': invalid Reset Value '{v}'"
+            ) from e
+
+        if lit_width > width:
+            raise RuntimeError(
+                f"Register '{reg_name}': Reset Value '{v}' width ({lit_width}) "
+                f"exceeds register width ({width})"
+            )
+        if parsed >= (1 << width):
+            raise RuntimeError(
+                f"Register '{reg_name}': Reset Value '{v}' does not fit in {width} bits"
+            )
+        return parsed
+
+    try:
+        parsed = int(v, 0)
+    except ValueError as e:
+        raise RuntimeError(
+            f"Register '{reg_name}': invalid Reset Value '{v}'"
+        ) from e
+
+    if parsed < 0:
+        raise RuntimeError(
+            f"Register '{reg_name}': negative Reset Value '{v}' is not supported"
+        )
+    if parsed >= (1 << width):
+        raise RuntimeError(
+            f"Register '{reg_name}': Reset Value '{v}' does not fit in {width} bits"
+        )
+    return parsed
 
 
 def sanitize_ident(name: str) -> str:
@@ -126,7 +187,7 @@ def load_csv(path: Path) -> Tuple[List[Reg], int]:
         if not reader.fieldnames:
             raise RuntimeError("CSV is missing a header row")
 
-        required = ["Address", "Name", "SW Access", "HW Access"]
+        required = ["Address", "Name", "SW Access", "HW Access", "Reset Value"]
         for col in required:
             if col not in reader.fieldnames:
                 raise RuntimeError(f"Missing required column: {col}")
@@ -144,15 +205,18 @@ def load_csv(path: Path) -> Tuple[List[Reg], int]:
             raw_name = (row.get("Name") or "").strip()
             raw_sw = (row.get("SW Access") or "").strip()
             raw_hw = (row.get("HW Access") or "").strip()
+            raw_reset = (row.get("Reset Value") or "").strip()
 
             # allow totally blank-ish lines
-            if not raw_addr and not raw_name and not raw_sw and not raw_hw:
+            if not raw_addr and not raw_name and not raw_sw and not raw_hw and not raw_reset:
                 continue
 
             if not raw_addr:
                 raise RuntimeError(f"Line {line_num}: missing Address")
             if not raw_name:
                 raise RuntimeError(f"Line {line_num}: missing Name")
+            if not raw_reset:
+                raise RuntimeError(f"Line {line_num}: missing Reset Value")
 
             try:
                 addr = int(raw_addr, 0)
@@ -179,6 +243,7 @@ def load_csv(path: Path) -> Tuple[List[Reg], int]:
 
             sw = parse_access(raw_sw)
             hw = parse_access(raw_hw)
+            reset = parse_reset_value(raw_reset, width, raw_name)
 
             bit_cells = [(row.get(col_name) or "").strip() for _, col_name in reg_cols]
 
@@ -191,6 +256,7 @@ def load_csv(path: Path) -> Tuple[List[Reg], int]:
                     hw=hw,
                     bit_cells=bit_cells,
                     width=width,
+                    reset=reset,
                 )
             )
 
@@ -359,7 +425,7 @@ def generate_module(module: str, regs: List[Reg], width: int, addr_bits: int) ->
     out.append("  always_ff @(posedge clk_i or negedge rst_ni) begin")
     out.append("    if (!rst_ni) begin")
     for r in regs:
-        out.append(f"      {r.ident}_q <= {width}'d0;")
+        out.append(f"      {r.ident}_q <= {width}'d{r.reset};")
     out.append("    end else begin")
 
     for r in regs:
@@ -382,7 +448,7 @@ def generate_module(module: str, regs: List[Reg], width: int, addr_bits: int) ->
     out.append("  end")
     out.append("")
 
-    # SW read mux
+    # SW read mux - preserved as flopped output
     out.append("  // SW read mux")
     out.append("  always_ff @(posedge clk_i) begin")
     out.append("    if (en_i) begin")
