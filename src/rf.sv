@@ -16,7 +16,6 @@ module rf (
   output rf_pkg::hw_out_t       hw_out_o
 );
 
-  // Raw register storage
   logic [3:0] RX0_CFG0_q;
   logic [3:0] RX0_CFG1_q;
   logic [3:0] RX1_CFG0_q;
@@ -44,7 +43,6 @@ module rf (
   logic [3:0] TEST_RES3_q;
   logic [3:0] TEST_RES4_q;
 
-  // HW typed outputs
   assign hw_out_o.RX0_CFG0 = rf_pkg::RX0_CFG0_t'(RX0_CFG0_q);
   assign hw_out_o.RX0_CFG1 = rf_pkg::RX0_CFG1_t'(RX0_CFG1_q);
   assign hw_out_o.RX1_CFG0 = rf_pkg::RX1_CFG0_t'(RX1_CFG0_q);
@@ -72,9 +70,6 @@ module rf (
   assign hw_out_o.TEST_RES3 = rf_pkg::TEST_RES3_t'(TEST_RES3_q);
   assign hw_out_o.TEST_RES4 = rf_pkg::TEST_RES4_t'(TEST_RES4_q);
 
-  // Sequential write logic
-  // - HW writes have priority over SW writes per register
-  // - HW writes are independent, so multiple registers can update in one cycle
   always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       RX0_CFG0_q <= 4'd0;
@@ -205,7 +200,6 @@ module rf (
     end
   end
 
-  // SW read mux
   always_ff @(posedge clk_i) begin
     if (en_i) begin
       unique case (addr_i)

@@ -405,22 +405,17 @@ def generate_module(module: str, regs: List[Reg], width: int, addr_bits: int) ->
     out.append("")
 
     # Raw storage for each register
-    out.append("  // Raw register storage")
     for r in regs:
         out.append(f"  logic [{width-1}:0] {r.ident}_q;")
     out.append("")
 
     # HW typed outputs: cast raw bits into the per-reg struct type
-    out.append("  // HW typed outputs")
     for r in regs:
         if r.hw.r:
             out.append(f"  assign hw_out_o.{r.ident} = {pkg}::{r.ident}_t'({r.ident}_q);")
     out.append("")
 
     # Sequential write logic
-    out.append("  // Sequential write logic")
-    out.append("  // - HW writes have priority over SW writes per register")
-    out.append("  // - HW writes are independent, so multiple registers can update in one cycle")
     out.append("  always_ff @(posedge clk_i) begin")
     out.append("    if (~rst_ni) begin")
     for r in regs:
@@ -448,7 +443,6 @@ def generate_module(module: str, regs: List[Reg], width: int, addr_bits: int) ->
     out.append("")
 
     # SW read mux - preserved as flopped output
-    out.append("  // SW read mux")
     out.append("  always_ff @(posedge clk_i) begin")
     out.append("    if (en_i) begin")
     out.append("      unique case (addr_i)")
