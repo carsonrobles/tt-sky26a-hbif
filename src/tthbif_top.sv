@@ -52,12 +52,7 @@ module tthbif_top #(
   );
 `endif
 
-  // loop back:
-  //assign uart_tx_data_valid = uart_rx_data_valid;
-  //assign uart_tx_data       = uart_rx_data;
-
-  localparam int RF_DEPTH      = 32;
-  localparam int RF_ADDR_WIDTH = $clog2(RF_DEPTH);
+  localparam int RF_ADDR_WIDTH = 5;
   localparam int RF_DATA_WIDTH = 4;
 
   wire                     rf_en;
@@ -91,24 +86,17 @@ module tthbif_top #(
   assign rf_in = '0;
 
   rf u_rf (
-    .clk_i                ( clk_i           ),
-    .rst_ni               ( rst_ni          ),
+    .clk_i    ( clk_i    ),
+    .rst_ni   ( rst_ni   ),
 
-    .en_i                 ( rf_en           ),
-    .we_i                 ( rf_we           ),
-    .addr_i               ( rf_addr         ),
-    .data_i               ( rf_wdata        ),
-    .data_o               ( rf_rdata        ),
+    .en_i     ( rf_en    ),
+    .we_i     ( rf_we    ),
+    .addr_i   ( rf_addr  ),
+    .data_i   ( rf_wdata ),
+    .data_o   ( rf_rdata ),
 
-    /*
-    .rx_comb_tap_sel_o    ( rx_comb_tap_sel ),
-    .rx_flop_tap_sel_o    ( rx_flop_tap_sel ),
-    .tx_comb_tap_sel_o    ( tx_comb_tap_sel ),
-    .tx_flop_tap_sel_o    ( tx_flop_tap_sel )
-    */
-
-    .hw_in_i  ( rf_in  ),
-    .hw_out_o ( rf_out )
+    .hw_in_i  ( rf_in    ),
+    .hw_out_o ( rf_out   )
   );
 
   wire [NUM_LANES-1:0]      rx_lane_en;
