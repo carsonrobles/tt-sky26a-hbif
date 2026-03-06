@@ -388,7 +388,6 @@ def generate_module(module: str, regs: List[Reg], width: int, addr_bits: int) ->
     out.append("// -----------------------------------------------------------------------------")
     out.append("// Auto-generated SystemVerilog register file")
     out.append("// -----------------------------------------------------------------------------")
-    out.append("`timescale 1ns/1ps")
     out.append("")
     out.append(f"module {module} (")
     out.append("  input  logic                 clk_i,")
@@ -422,8 +421,8 @@ def generate_module(module: str, regs: List[Reg], width: int, addr_bits: int) ->
     out.append("  // Sequential write logic")
     out.append("  // - HW writes have priority over SW writes per register")
     out.append("  // - HW writes are independent, so multiple registers can update in one cycle")
-    out.append("  always_ff @(posedge clk_i or negedge rst_ni) begin")
-    out.append("    if (!rst_ni) begin")
+    out.append("  always_ff @(posedge clk_i) begin")
+    out.append("    if (~rst_ni) begin")
     for r in regs:
         out.append(f"      {r.ident}_q <= {width}'d{r.reset};")
     out.append("    end else begin")

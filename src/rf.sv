@@ -75,8 +75,8 @@ module rf (
   // Sequential write logic
   // - HW writes have priority over SW writes per register
   // - HW writes are independent, so multiple registers can update in one cycle
-  always_ff @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
+  always_ff @(posedge clk_i) begin
+    if (~rst_ni) begin
       RX0_CFG0_q <= 4'd0;
       RX0_CFG1_q <= 4'd0;
       RX1_CFG0_q <= 4'd0;

@@ -23,6 +23,7 @@ module tt_um_hbif_carsonrobles (
 
   assign tthbif_rx             = ui_in[NUM_LANES-1:0];
   assign uo_out[NUM_LANES-1:0] = tthbif_tx;
+  assign uo_out[7:NUM_LANES]   = '0;
 
   tthbif_top #(
     .NUM_LANES ( NUM_LANES )
@@ -63,7 +64,8 @@ module tt_um_hbif_carsonrobles (
     uio_in[4],
     uio_in[5],
     uio_in[6],
-    uio_in[7]
+    uio_in[7],
+    ui_in[7:NUM_LANES]
   };
 
 endmodule

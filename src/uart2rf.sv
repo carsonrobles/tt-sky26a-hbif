@@ -55,7 +55,7 @@ module uart2rf #(
   always_ff @(posedge clk_i) begin
     if (uart_data_valid_i & (fsm == IDLE)) begin
       rf_we_o   <= uart_data_i[7];
-      rf_addr_o <= uart_data_i[6:0];
+      rf_addr_o <= uart_data_i[RF_ADDR_WIDTH-1:0];
     end
   end
 
