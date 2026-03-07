@@ -99,13 +99,13 @@ module tthbif_top #(
     .hw_out_o ( rf_out   )
   );
 
-  wire [NUM_LANES-1:0]      rx_lane_en;
-  wire [NUM_LANES-1:0]      tx_lane_en;
+  wire [NUM_LANES-1:0]           rx_lane_en;
+  wire [NUM_LANES-1:0]           tx_lane_en;
 
-  wire [NUM_LANES-1:0][1:0] rx_comb_tap_sel;
-  wire [NUM_LANES-1:0]      rx_flop_tap_sel;
-  wire [NUM_LANES-1:0][1:0] tx_comb_tap_sel;
-  wire [NUM_LANES-1:0]      tx_flop_tap_sel;
+  wire [NUM_LANES-1:0][1:0][1:0] rx_comb_tap_sel;
+  wire [NUM_LANES-1:0][1:0]      rx_flop_tap_sel;
+  wire [NUM_LANES-1:0][1:0][1:0] tx_comb_tap_sel;
+  wire [NUM_LANES-1:0][1:0]      tx_flop_tap_sel;
 
   assign rx_lane_en[0]      = rf_out.RX0_CFG1.enable;
   assign rx_lane_en[1]      = rf_out.RX1_CFG1.enable;
@@ -117,26 +117,42 @@ module tthbif_top #(
   assign tx_lane_en[2]      = rf_out.TX2_CFG1.enable;
   assign tx_lane_en[3]      = rf_out.TX3_CFG1.enable;
 
-  assign rx_comb_tap_sel[0] = rf_out.RX0_CFG0.p_comb_tap_sel;
-  assign rx_flop_tap_sel[0] = rf_out.RX0_CFG1.p_flop_tap_sel;
-  assign rx_comb_tap_sel[1] = rf_out.RX1_CFG0.p_comb_tap_sel;
-  assign rx_flop_tap_sel[1] = rf_out.RX1_CFG1.p_flop_tap_sel;
-  assign rx_comb_tap_sel[2] = rf_out.RX2_CFG0.p_comb_tap_sel;
-  assign rx_flop_tap_sel[2] = rf_out.RX2_CFG1.p_flop_tap_sel;
-  assign rx_comb_tap_sel[3] = rf_out.RX3_CFG0.p_comb_tap_sel;
-  assign rx_flop_tap_sel[3] = rf_out.RX3_CFG1.p_flop_tap_sel;
+  assign rx_comb_tap_sel[0][0] = rf_out.RX0_CFG0.p_comb_tap_sel;
+  assign rx_flop_tap_sel[0][0] = rf_out.RX0_CFG1.p_flop_tap_sel;
+  assign rx_comb_tap_sel[0][1] = rf_out.RX0_CFG0.n_comb_tap_sel;
+  assign rx_flop_tap_sel[0][1] = rf_out.RX0_CFG1.n_flop_tap_sel;
+  assign rx_comb_tap_sel[1][0] = rf_out.RX1_CFG0.p_comb_tap_sel;
+  assign rx_flop_tap_sel[1][0] = rf_out.RX1_CFG1.p_flop_tap_sel;
+  assign rx_comb_tap_sel[1][1] = rf_out.RX1_CFG0.n_comb_tap_sel;
+  assign rx_flop_tap_sel[1][1] = rf_out.RX1_CFG1.n_flop_tap_sel;
+  assign rx_comb_tap_sel[2][0] = rf_out.RX2_CFG0.p_comb_tap_sel;
+  assign rx_flop_tap_sel[2][0] = rf_out.RX2_CFG1.p_flop_tap_sel;
+  assign rx_comb_tap_sel[2][1] = rf_out.RX2_CFG0.n_comb_tap_sel;
+  assign rx_flop_tap_sel[2][1] = rf_out.RX2_CFG1.n_flop_tap_sel;
+  assign rx_comb_tap_sel[3][0] = rf_out.RX3_CFG0.p_comb_tap_sel;
+  assign rx_flop_tap_sel[3][0] = rf_out.RX3_CFG1.p_flop_tap_sel;
+  assign rx_comb_tap_sel[3][1] = rf_out.RX3_CFG0.n_comb_tap_sel;
+  assign rx_flop_tap_sel[3][1] = rf_out.RX3_CFG1.n_flop_tap_sel;
 
-  assign tx_comb_tap_sel[0] = rf_out.TX0_CFG0.p_comb_tap_sel;
-  assign tx_flop_tap_sel[0] = rf_out.TX0_CFG1.p_flop_tap_sel;
-  assign tx_comb_tap_sel[1] = rf_out.TX1_CFG0.p_comb_tap_sel;
-  assign tx_flop_tap_sel[1] = rf_out.TX1_CFG1.p_flop_tap_sel;
-  assign tx_comb_tap_sel[2] = rf_out.TX2_CFG0.p_comb_tap_sel;
-  assign tx_flop_tap_sel[2] = rf_out.TX2_CFG1.p_flop_tap_sel;
-  assign tx_comb_tap_sel[3] = rf_out.TX3_CFG0.p_comb_tap_sel;
-  assign tx_flop_tap_sel[3] = rf_out.TX3_CFG1.p_flop_tap_sel;
+  assign tx_comb_tap_sel[0][0] = rf_out.TX0_CFG0.p_comb_tap_sel;
+  assign tx_flop_tap_sel[0][0] = rf_out.TX0_CFG1.p_flop_tap_sel;
+  assign tx_comb_tap_sel[0][1] = rf_out.TX0_CFG0.n_comb_tap_sel;
+  assign tx_flop_tap_sel[0][1] = rf_out.TX0_CFG1.n_flop_tap_sel;
+  assign tx_comb_tap_sel[1][0] = rf_out.TX1_CFG0.p_comb_tap_sel;
+  assign tx_flop_tap_sel[1][0] = rf_out.TX1_CFG1.p_flop_tap_sel;
+  assign tx_comb_tap_sel[1][1] = rf_out.TX1_CFG0.n_comb_tap_sel;
+  assign tx_flop_tap_sel[1][1] = rf_out.TX1_CFG1.n_flop_tap_sel;
+  assign tx_comb_tap_sel[2][0] = rf_out.TX2_CFG0.p_comb_tap_sel;
+  assign tx_flop_tap_sel[2][0] = rf_out.TX2_CFG1.p_flop_tap_sel;
+  assign tx_comb_tap_sel[2][1] = rf_out.TX2_CFG0.n_comb_tap_sel;
+  assign tx_flop_tap_sel[2][1] = rf_out.TX2_CFG1.n_flop_tap_sel;
+  assign tx_comb_tap_sel[3][0] = rf_out.TX3_CFG0.p_comb_tap_sel;
+  assign tx_flop_tap_sel[3][0] = rf_out.TX3_CFG1.p_flop_tap_sel;
+  assign tx_comb_tap_sel[3][1] = rf_out.TX3_CFG0.n_comb_tap_sel;
+  assign tx_flop_tap_sel[3][1] = rf_out.TX3_CFG1.n_flop_tap_sel;
 
-  wire [NUM_LANES-1:0] tthbif_rx;
-  wire [NUM_LANES-1:0] tthbif_tx;
+  wire [2*NUM_LANES-1:0] tthbif_rx;
+  wire [2*NUM_LANES-1:0] tthbif_tx;
 
   tthbif #(
     .NUM_LANES            ( NUM_LANES ),
@@ -161,8 +177,8 @@ module tthbif_top #(
     .rx_i              ( tthbif_rx_i       ),
     .tx_o              ( tthbif_tx_o       ),
 
-    .rx_o              ( tthbif_rx         ),
-    .tx_i              ( tthbif_tx         )
+    .data_o            ( tthbif_rx         ),
+    .data_i            ( tthbif_tx         )
   );
 
   // loop back
