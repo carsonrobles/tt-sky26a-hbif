@@ -41,7 +41,7 @@ def build_tthbif_frame(data: bytes):
 
     return frame
 
-#@cocotb.test()
+@cocotb.test()
 async def test_rf(dut):
     dut._log.info("Start")
 
@@ -92,7 +92,7 @@ async def test_rf(dut):
             assert recv == bytes([data[i] & 0xf])
 
 @cocotb.test()
-async def test_project(dut):
+async def test_tthbif(dut):
     dut._log.info("Start")
 
     clock = Clock(dut.clk, 15, unit="ns")
@@ -240,6 +240,7 @@ async def test_project(dut):
 
     rx_flop_tap = random.randint(0, 1)
 
+    dut._log.info(f"Configure TTHBIF")
     for i in range(4):
         rx_comb_tap = random.randint(0, 1)
         await set_rx_p_comb_tap(i, rx_comb_tap)
@@ -255,6 +256,7 @@ async def test_project(dut):
 
     NUM_TEST = 100
 
+    dut._log.info(f"Test TTHBIF")
     for test in range(NUM_TEST):
         data = bytes(random.getrandbits(8) for _ in range(random.randint(1, TTHBIF_FRAME_LEN)))
         dut._log.info(f"test {test+1}/{NUM_TEST}:")
