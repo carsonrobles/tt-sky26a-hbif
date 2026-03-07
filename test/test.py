@@ -30,7 +30,9 @@ def build_rd_packet(addr: int):
 def build_wr_packet(addr: int, data: int):
     return build_packet(True, addr, data)
 
-TTHBIF_PREAMBLE = bytes([0xA5] * 4)
+TTHBIF_PREAMBLE_LEN = 4
+TTHBIF_PREAMBLE = bytes([0xA5] * TTHBIF_PREAMBLE_LEN)
+#TTHBIF_PREAMBLE = random.randbytes(TTHBIF_PREAMBLE_LEN)
 TTHBIF_FRAME_LEN = 1024
 
 def build_tthbif_frame(data: bytes):
@@ -254,7 +256,7 @@ async def test_tthbif(dut):
     dut.tthbif_rx.value = 0
     await ClockCycles(dut.clk, 10)
 
-    NUM_TEST = 100
+    NUM_TEST = 250
 
     dut._log.info(f"Test TTHBIF")
     for test in range(NUM_TEST):
