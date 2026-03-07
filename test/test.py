@@ -117,6 +117,29 @@ async def test_project(dut):
         cocotb.start_soon(uart_tx.send_bytes(build_wr_packet(addr, recv)))
         recv = await uart_rx.recv_bytes(1)
 
+    async def tthbif_send_bytes(b: bytes, posedge_start: bool):
+        posedge = posedge_start
+
+        for i in range(len(b)):
+            for j in range(2):
+                if j == 0:
+                    v = b[i] & 0xf
+                else:
+                    v = (b[i] >> 4) & 0xf
+
+                if posedge:
+                    await RisingEdge(dut.clk)
+                else:
+                    await FallingEdge(dut.clk)
+
+                print(f"sending {hex(b[i])} -> {hex(v)}")
+                dut.tthbif_rx.value = v
+                posedge = not posedge
+
+    NUM_BYTES = 16
+    #data = bytes(random.getrandbits(8) for _ in range(NUM_BYTES))
+    data = bytes((((i+1) << 4) | (i & 0xf)) & 0xff for i in range(0, NUM_BYTES, 2))
+
     for i in range(4):
         await enable_rx_lane(i)
         await enable_tx_lane(i)
@@ -124,14 +147,18 @@ async def test_project(dut):
     dut.tthbif_rx.value = 0
     await ClockCycles(dut.clk, 10)
 
+    '''
     for i in range(16):
         await Timer(3.5, unit="ns")
         dut.tthbif_rx.value = i
-        if i % 2:
+        if i % 2 == 0:
             await RisingEdge(dut.clk)
         else:
             await FallingEdge(dut.clk)
         print(f" tx={dut.tthbif_tx.value}");
+    '''
+
+    await tthbif_send_bytes(data, True)
 
     dut.tthbif_rx.value = 0
     await ClockCycles(dut.clk, 10)

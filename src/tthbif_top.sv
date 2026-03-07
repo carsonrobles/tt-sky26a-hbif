@@ -151,8 +151,8 @@ module tthbif_top #(
   assign tx_comb_tap_sel[3][1] = rf_out.TX3_CFG0.n_comb_tap_sel;
   assign tx_flop_tap_sel[3][1] = rf_out.TX3_CFG1.n_flop_tap_sel;
 
-  wire [2*NUM_LANES-1:0] tthbif_rx;
-  wire [2*NUM_LANES-1:0] tthbif_tx;
+  wire  [2*NUM_LANES-1:0] tthbif_rx;
+  logic [2*NUM_LANES-1:0] tthbif_tx;
 
   tthbif #(
     .NUM_LANES            ( NUM_LANES ),
@@ -182,6 +182,7 @@ module tthbif_top #(
   );
 
   // loop back
-  assign tthbif_tx = tthbif_rx;
+  always_ff @(posedge clk_i)
+    tthbif_tx <= tthbif_rx;
 
 endmodule
