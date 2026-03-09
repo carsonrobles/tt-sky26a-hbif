@@ -21,12 +21,3 @@ set TTHBIF_MAX_DELAY $CLOCK_PERIOD
 
 set_max_delay $TTHBIF_MAX_DELAY -from [get_ports {ui_in*}]
 set_max_delay $TTHBIF_MAX_DELAY -to   [get_ports {uo_out*}]
-
-set dont_touch_cells [get_cells -filter "name =~ *dont_touch*"]
-set n [llength $dont_touch_cells]
-puts "found $n dont_touch_cells"
-foreach e $dont_touch_cells {
-  puts [get_property $e name]
-}
-# sta tool doesn't like this:
-#set_dont_touch $dont_touch_cells
