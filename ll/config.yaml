@@ -15,8 +15,8 @@ VERILOG_FILES:
   - dir::../src/tthbif_top.sv
   - dir::../src/tt_um_hbif_carsonrobles.sv
 
-#PNR_SDC_FILE: dir::sdc/tt_pnr.sdc
-#SIGNOFF_SDC_FILE: dir::sdc/tt_sta.sdc
+PNR_SDC_FILE: dir::../src/sdc/tt_um_hbif_carsonrobles_pnr.sdc
+SIGNOFF_SDC_FILE: dir::../src/sdc/tt_um_hbif_carsonrobles_signoff.sdc
 
 FP_SIZING: absolute
 DIE_AREA: [0, 0, 161.00, 225.76]
