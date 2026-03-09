@@ -1,0 +1,24 @@
+DESIGN_NAME: tt_um_hbif_carsonrobles
+VERILOG_FILES:
+  - dir::../src/rip/src/uart/rtl/uart_pkg.sv
+  - dir::../src/rip/src/uart/rtl/uart_rx.sv
+  - dir::../src/rip/src/uart/rtl/uart_tx.sv
+  - dir::../src/rip/src/uart/rtl/uart.sv
+  - dir::../src/rf_pkg.sv
+  - dir::../src/uart2rf.sv
+  - dir::../src/rf.sv
+  - dir::../src/tthbif/src/tthbif_comb_path.sv
+  - dir::../src/tthbif/src/tthbif_flop_path.sv
+  - dir::../src/tthbif/src/tthbif_rx_lane.sv
+  - dir::../src/tthbif/src/tthbif_tx_lane.sv
+  - dir::../src/tthbif/src/tthbif.sv
+  - dir::../src/tthbif_top.sv
+  - dir::../src/tt_um_hbif_carsonrobles.sv
+
+#PNR_SDC_FILE: dir::sdc/tt_pnr.sdc
+#SIGNOFF_SDC_FILE: dir::sdc/tt_sta.sdc
+
+FP_SIZING: absolute
+DIE_AREA: [0, 0, 161.00, 225.76]
+FP_DEF_TEMPLATE: dir::../def/tt_block_1x2_pg.def
+PL_TARGET_DENSITY_PCT: 60
