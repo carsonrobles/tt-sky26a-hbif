@@ -154,6 +154,8 @@ module tthbif_top #(
   wire  [2*NUM_LANES-1:0] tthbif_rx;
   logic [2*NUM_LANES-1:0] tthbif_tx;
 
+  `define SKY130_INV
+
   tthbif #(
     .NUM_LANES            ( NUM_LANES ),
   
