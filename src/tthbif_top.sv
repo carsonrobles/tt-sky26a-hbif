@@ -158,8 +158,7 @@ module tthbif_top #(
     .NUM_LANES            ( NUM_LANES ),
   
     .NUM_FLOP_TAP         ( 2         ),
-    .NUM_COMB_TAP         ( 4         ),
-    .NUM_BUF_PER_COMB_TAP ( 4         )
+    .NUM_COMB_TAP         ( 4         )
   ) u_tthbif (
     .clk_i             ( clk_i             ),
     .rst_ni            ( rst_ni            ),
