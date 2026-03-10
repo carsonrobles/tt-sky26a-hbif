@@ -7,6 +7,7 @@ VERILOG_FILES:
   - dir::../src/rf_pkg.sv
   - dir::../src/uart2rf.sv
   - dir::../src/rf.sv
+  - dir::../src/tthbif/src/tthbif_comb_delay.sv
   - dir::../src/tthbif/src/tthbif_comb_path.sv
   - dir::../src/tthbif/src/tthbif_flop_path.sv
   - dir::../src/tthbif/src/tthbif_rx_lane.sv
