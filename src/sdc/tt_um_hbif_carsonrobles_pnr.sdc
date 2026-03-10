@@ -19,8 +19,8 @@ set_false_path -to   [get_ports {uio_out*}]
 # TODO: what do I actually want here.
 set TTHBIF_MAX_DELAY $CLOCK_PERIOD
 
-set_max_delay $TTHBIF_MAX_DELAY -from [get_ports {ui_in*}]
-set_max_delay $TTHBIF_MAX_DELAY -to   [get_ports {uo_out*}]
+#set_max_delay $TTHBIF_MAX_DELAY -from [get_ports {ui_in*}]
+#set_max_delay $TTHBIF_MAX_DELAY -to   [get_ports {uo_out*}]
 
 set dont_touch_cells [get_cells -filter "name =~ *dont_touch*"]
 set n [llength $dont_touch_cells]
@@ -30,3 +30,8 @@ foreach e $dont_touch_cells {
 }
 # sta tool doesn't like this:
 #set_dont_touch $dont_touch_cells
+
+create_clock -name io_virt_clk -period $CLOCK_PERIOD
+
+set_input_delay  0 -clock [get_clocks {io_virt_clk}] [get_ports {ui_in*}]
+set_output_delay 0 -clock [get_clocks {io_virt_clk}] [get_ports {ui_out*}]
