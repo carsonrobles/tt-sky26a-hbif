@@ -25,4 +25,4 @@ set TTHBIF_MAX_DELAY $CLOCK_PERIOD
 create_clock -name io_virt_clk -period $CLOCK_PERIOD
 
 set_input_delay  0 -clock [get_clocks {io_virt_clk}] [get_ports {ui_in*}]
-set_output_delay 0 -clock [get_clocks {io_virt_clk}] [get_ports {ui_out*}]
+set_output_delay 0 -clock [get_clocks {io_virt_clk}] [get_ports {uo_out*}]
